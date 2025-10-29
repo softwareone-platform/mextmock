@@ -1,0 +1,5 @@
+base_url: "https://api.s1.today/public/v1"
+extension_id: "EXT-0000-1111"
+extension_domain: "ext.s1.today"
+extension_fqdn: "@jinja {{this.extension_id | lower}}.{{this.extension_domain}}"
+
