@@ -2,6 +2,7 @@ serviceName: mextmock
 image:
   repository: nlpapp0336cre.azurecr.io/gha/mextmock
   pullPolicy: IfNotPresent
+  tag: ""
  
 extensionId: EXT-1234-5678
 extensionApiKey: api-key

@@ -37,18 +37,42 @@ validate_replicas() {
 usage() {
     echo ""
     echo "Usage:"
-    echo "  $0 install <extension_id> <api_key> [--environment <env>] [--namespace <ns>] [--replicas <count>] [--dry-run]"
-    echo "  $0 upgrade <extension_id> [--environment <env>] [--namespace <ns>] [--replicas <count>] [--dry-run]"
-    echo "  $0 template <extension_id> [<api_key>] [--environment <env>] [--namespace <ns>] [--replicas <count>]"
+    echo "  $0 install <extension_id> <api_key> [--environment <env>] [--namespace <ns>|-n <ns>] [--replicas <count>] [--app-version <version>] [--dry-run]"
+    echo "  $0 upgrade <extension_id> [--environment <env>] [--namespace <ns>|-n <ns>] [--replicas <count>] [--app-version <version>] [--dry-run]"
+    echo "  $0 template <extension_id> [<api_key>] [--environment <env>] [--namespace <ns>|-n <ns>] [--replicas <count>] [--app-version <version>]"
     echo
-    echo "  <extension_id> must follow format: EXT-NNNN-NNNN (case insensitive)"
-    echo "  <env> can be: dev, test, stage, prod (default: dev)"
-    echo "  <ns> can be any valid Kubernetes namespace (default: mpt-extensions)"
-    echo "  <count> can be any positive integer (default: 1)"
-    echo "  --dry-run: Show commands and rendered templates without executing"
-    echo "  template: Only render and display the templates"
+    echo "Notes and defaults:" 
+    echo "  <extension_id>  : must follow format EXT-NNNN-NNNN (case-insensitive). Example: EXT-1234-5678"
+    echo "  <env>           : dev, test, stage, prod (default: dev)"
+    echo "  <ns>            : Kubernetes namespace (default: mpt-extensions). Short alias: -n"
+    echo "  <count>         : positive integer replicas (default: 1)"
+    echo "  --dry-run       : Show commands and rendered templates without executing"
+    echo "  --app-version   : Override the image tag. If not provided, the script will try to use the latest git tag in the script's repo (or fail if none found)."
+    echo "  template        : Only render and display the Helm templates (api_key optional; defaults to 'default-api-key')"
     echo ""
     exit 1
+}
+
+
+# Resolve the app version (image tag) to use.
+# If --app-version is not provided, attempt to use the latest git tag from the script's repo.
+resolve_app_version() {
+    if [[ -n "${app_version:-}" ]]; then
+        echo "Using app version (from flag): ${app_version}"
+        return 0
+    fi
+
+    if [[ -d "${SCRIPT_DIR}/.git" ]]; then
+        app_version="$(git -C "${SCRIPT_DIR}" describe --tags --abbrev=0 2>/dev/null || true)"
+        if [[ -z "${app_version}" ]]; then
+            echo "Error: no git tags found in ${SCRIPT_DIR}. Please provide --app-version." >&2
+            exit 1
+        fi
+        echo "Using app version (from git tag): ${app_version}"
+    else
+        echo "Error: .git folder not found in ${SCRIPT_DIR}. --app-version is required." >&2
+        exit 1
+    fi
 }
 
 if [[ $# -lt 2 ]]; then
@@ -62,6 +86,7 @@ environment="dev"
 namespace="mpt-extensions"
 replicas=1
 dry_run=false
+app_version=""
 args=()
 
 # Parse arguments
@@ -82,6 +107,10 @@ while [[ $# -gt 0 ]]; do
         --dry-run)
             dry_run=true
             shift
+            ;;
+        --app-version)
+            app_version="$2"
+            shift 2
             ;;
         *)
             args+=("$1")
@@ -119,12 +148,17 @@ if [[ "$command" == "install" ]]; then
     # Convert extension_id to lowercase and replace underscores with hyphens for release name
     release_name="mextmock-$(echo "${extension_id}" | tr '[:upper:]' '[:lower:]' | sed 's/_/-/g')"
 
+    # Resolve the app version (image tag) to use (may exit if resolution fails)
+    resolve_app_version
+
     helm_command="helm install \"${release_name}\" \"${HELM_CHART_DIR}\" \
         --namespace \"${namespace}\" \
         --set extensionId=\"${extension_id}\" \
         --set extensionApiKey=\"${api_key}\" \
         --set replicaCount=\"${replicas}\" \
-        --set envDomain=\"${domain}\""
+        --set envDomain=\"${domain}\" \
+        --set image.tag=\"${app_version}\""
+
 
     if [[ "$dry_run" == "true" ]]; then
         echo "=== DRY RUN MODE ==="
@@ -137,7 +171,8 @@ if [[ "$command" == "install" ]]; then
             --set extensionId="${extension_id}" \
             --set extensionApiKey="${api_key}" \
             --set replicaCount="${replicas}" \
-            --set envDomain="${domain}"
+            --set envDomain="${domain}" \
+            --set image.tag="${app_version}"
     else
         echo "Installing Helm release: ${release_name} (env: ${environment}, domain: ${domain})"
         eval "$helm_command"
@@ -159,11 +194,15 @@ elif [[ "$command" == "upgrade" ]]; then
     # Convert extension_id to lowercase and replace underscores with hyphens for release name
     release_name="mextmock-$(echo "${extension_id}" | tr '[:upper:]' '[:lower:]' | sed 's/_/-/g')"
 
+    # Resolve the app version (image tag) to use (may exit if resolution fails)
+    resolve_app_version
+
     helm_command="helm upgrade \"${release_name}\" \"${HELM_CHART_DIR}\" \
         --namespace \"${namespace}\" \
         --set extensionId=\"${extension_id}\" \
         --set replicaCount=\"${replicas}\" \
         --set envDomain=\"${domain}\" \
+        --set image.tag=\"${app_version}\" \
         --install"
 
     if [[ "$dry_run" == "true" ]]; then
@@ -176,7 +215,8 @@ elif [[ "$command" == "upgrade" ]]; then
             --namespace "${namespace}" \
             --set extensionId="${extension_id}" \
             --set replicaCount="${replicas}" \
-            --set envDomain="${domain}"
+            --set envDomain="${domain}" \
+            --set image.tag="${app_version}"
     else
         echo "Upgrading Helm release: ${release_name} (env: ${environment}, domain: ${domain})"
         eval "$helm_command"
@@ -198,7 +238,8 @@ elif [[ "$command" == "template" ]]; then
     
     # Convert extension_id to lowercase and replace underscores with hyphens for release name
     release_name="mextmock-$(echo "${extension_id}" | tr '[:upper:]' '[:lower:]' | sed 's/_/-/g')"
-
+    # Resolve app version (image tag)
+    resolve_app_version
     echo "=== RENDERING TEMPLATES ==="
     echo "Extension ID: ${extension_id}"
     echo "Environment: ${environment}"
@@ -212,7 +253,8 @@ elif [[ "$command" == "template" ]]; then
         --set extensionId="${extension_id}" \
         --set extensionApiKey="${api_key}" \
         --set replicaCount="${replicas}" \
-        --set envDomain="${domain}"
+        --set envDomain="${domain}" \
+        --set image.tag="${app_version}"
 
 else
     echo "Error: unknown command '${command}'"

@@ -9,5 +9,5 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade
 data:
   SERVICE_NAME: {{ .Values.serviceName | quote }}
-  MPT_EXTENSION_ID: {{ .Values.extensionId | quote }}
+  MPT_EXTENSION_ID: {{ .Values.extensionId | upper |quote }}
   MPT_ENV_DOMAIN: {{ .Values.envDomain | quote }}

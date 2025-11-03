@@ -34,7 +34,6 @@ def bootstrap():
     )
 
     data = {
-        "extension": {"id": settings.extension_id},
         "externalId": external_id,
         "version": mextmock.__version__,
         "meta": {
@@ -60,11 +59,21 @@ def bootstrap():
             f"-> {evtinfo["path"]}"
         )
         logger.info(msg)
+
     if not IDENTITY_FILE.exists():
         logger.info(
             f"Request new identity for {settings.extension_id}: externalId={external_id}",
         )
         data["channel"] = {}
+    else:
+        identity = json.load(open(IDENTITY_FILE))
+        identity_extension = identity.get("mrok", {}).get("extension", "")
+        if identity_extension.lower() != settings.extension_id.lower():
+            logger.warning(
+                f"The existing identity belongs to the extension {identity_extension}. "
+                f"Request new identity for {settings.extension_id}: externalId={external_id}",
+            )
+            data["channel"] = {}
 
     req = request.Request(
         f"{settings.base_url}/extensibility/extensions/{settings.extension_id}/instances",

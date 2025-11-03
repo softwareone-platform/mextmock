@@ -1,7 +1,9 @@
 import logging
+from pathlib import Path
 
 from devtools import pformat
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from mextmock.logging import setup_logging
 from mextmock.schemas import Event
@@ -14,18 +16,29 @@ app = FastAPI(
     description="API to orchestrate OpenZiti for Extensions.",
     swagger_ui_parameters={"showExtensions": False, "showCommonExtensions": False},
     openapi_tags=[
-    {
-        "name": "Event handlers",
-        "description": "Endpoints for receiving platform events.",
-    },
+        {
+            "name": "Event handlers",
+            "description": "Endpoints for receiving platform events.",
+        },
     ],
     version="5.0.0",
-    root_path="/public/v1",
+    openapi_url="/public/v1/openapi.json",
+    docs_url="/public/v1/docs",
+    redoc_url="/public/v1/redoc",
 )
 
+app.mount(
+    "/static",
+    StaticFiles(
+        directory=Path(__file__).parent.resolve() / "static",
+        html=True,
+    ),
+    name="static",
+)
 
+api = APIRouter(prefix="/public/v1")
 
-@app.post(
+@api.post(
     "/orders",
     tags=["Event handlers"],
 )
@@ -38,3 +51,6 @@ async def process_orders(event: Event):
         f"New event received: {pformat(event)}"
     )
     return {"response": "OK"}
+
+
+app.include_router(api)
