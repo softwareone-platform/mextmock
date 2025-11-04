@@ -38,7 +38,7 @@ usage() {
     echo ""
     echo "Usage:"
     echo "  $0 install <extension_id> <api_key> [--environment <env>] [--namespace <ns>|-n <ns>] [--replicas <count>] [--app-version <version>] [--dry-run]"
-    echo "  $0 upgrade <extension_id> [--environment <env>] [--namespace <ns>|-n <ns>] [--replicas <count>] [--app-version <version>] [--dry-run]"
+    echo "  $0 upgrade <extension_id> <api_key> [--environment <env>] [--namespace <ns>|-n <ns>] [--replicas <count>] [--app-version <version>] [--dry-run]"
     echo "  $0 template <extension_id> [<api_key>] [--environment <env>] [--namespace <ns>|-n <ns>] [--replicas <count>] [--app-version <version>]"
     echo
     echo "Notes and defaults:" 
@@ -179,11 +179,12 @@ if [[ "$command" == "install" ]]; then
     fi
 
 elif [[ "$command" == "upgrade" ]]; then
-    if [[ ${#args[@]} -lt 1 ]]; then
-        echo "Error: upgrade requires <extension_id>"
+    if [[ ${#args[@]} -lt 2 ]]; then
+        echo "Error: upgrade requires <extension_id> and <api_key>"
         usage
     fi
     extension_id="${args[0]}"
+    api_key="${args[1]}"
     
     # Validate extension ID format
     validate_extension_id "$extension_id"
@@ -197,9 +198,11 @@ elif [[ "$command" == "upgrade" ]]; then
     # Resolve the app version (image tag) to use (may exit if resolution fails)
     resolve_app_version
 
+    # extensionApiKey is required for upgrade: always pass it to Helm
     helm_command="helm upgrade \"${release_name}\" \"${HELM_CHART_DIR}\" \
         --namespace \"${namespace}\" \
         --set extensionId=\"${extension_id}\" \
+        --set extensionApiKey=\"${api_key}\" \
         --set replicaCount=\"${replicas}\" \
         --set envDomain=\"${domain}\" \
         --set image.tag=\"${app_version}\" \
@@ -211,9 +214,11 @@ elif [[ "$command" == "upgrade" ]]; then
         echo "$helm_command"
         echo
         echo "=== RENDERED TEMPLATES ==="
+        # For template mode, pass extensionApiKey (required for upgrade)
         helm template "${release_name}" "${HELM_CHART_DIR}" \
             --namespace "${namespace}" \
             --set extensionId="${extension_id}" \
+            --set extensionApiKey="${api_key}" \
             --set replicaCount="${replicas}" \
             --set envDomain="${domain}" \
             --set image.tag="${app_version}"
