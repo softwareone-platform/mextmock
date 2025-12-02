@@ -38,20 +38,30 @@ def bootstrap():
         "version": mextmock.__version__,
         "meta": {
             "version": mextmock.__version__,
-            "placeholders": [
-            ],
+            "placeholders": [],
             "openapi": "/public/v1/openapi.json",
             "events": [
                 {
-                    "event": "platform.commerce.order",
-                    "filter": "eq(status,Processing)",
+                    "event": "platform.commerce.order.created",
+                    "filter": "and(eq(status,Processing),eq(product.id,PRD-8373-4303))",
                     "path": "/public/v1/orders",
                     "task": True,
-                }
+                },
+                {
+                    "event": "platform.commerce.order.status_changed",
+                    "filter": "and(eq(status,Processing),eq(product.id,PRD-8373-4303))",
+                    "path": "/public/v1/orders",
+                    "task": True,
+                },
             ],
-
         },
     }
+    """
+    fetch order 
+    parametro di ordine ( fullfillment) -> OK
+    cambio task e order a completed 
+    
+    """
     for evtinfo in data["meta"]["events"]:
         msg = (
             f"Register event subscription to {evtinfo['event']} "
