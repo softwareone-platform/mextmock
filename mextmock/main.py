@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from pathlib import Path
 from urllib import request
 
@@ -43,7 +44,13 @@ def bootstrap():
             "openapi": "/public/v1/openapi.json",
             "events": [
                 {
-                    "event": "platform.commerce.order",
+                    "event": "platform.commerce.order.updated",
+                    "filter": "eq(status,Processing)",
+                    "path": "/public/v1/orders",
+                    "task": True,
+                },
+                {
+                    "event": "platform.commerce.order.status_changed",
                     "filter": "eq(status,Processing)",
                     "path": "/public/v1/orders",
                     "task": True,
@@ -94,7 +101,11 @@ def bootstrap():
             f"{response_data["id"]}")
 
 
-    ziticorn.run("mextmock.app:app", str(IDENTITY_FILE), workers=4)
+    ziticorn.run("mextmock.app:app",
+                    str(IDENTITY_FILE),
+                    workers=4,
+                    reload=True,
+    )
 
 
 if __name__ == "__main__":
