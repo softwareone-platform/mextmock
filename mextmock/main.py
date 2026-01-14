@@ -7,7 +7,7 @@ from mrok.agent import ziticorn
 
 import mextmock
 from mextmock.config import settings
-from mextmock.logging import setup_logging
+from mextmock.logging_config import setup_logging
 from mextmock.utils import get_instance_external_id
 
 logger = logging.getLogger("mextmock")
@@ -18,11 +18,11 @@ def bootstrap():
     setup_logging()
 
     if not settings.extension_id:
-        raise Exception("No Extension ID has been provided.")
+        raise ValueError("No Extension ID has been provided.")
     if not settings.base_url:
-        raise Exception("No Marketplace API Url has been provided.")
+        raise ValueError("No Marketplace API Url has been provided.")
     if not settings.api_key:
-        raise Exception("No Marketplace Vendor API Key has been provided.")
+        raise ValueError("No Marketplace Vendor API Key has been provided.")
 
 
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {settings.api_key}"}
@@ -35,28 +35,32 @@ def bootstrap():
 
     data = {
         "externalId": external_id,
-        "version": mextmock.__version__,
         "meta": {
             "version": mextmock.__version__,
-            "placeholders": [
-            ],
+            "placeholders": [],
             "openapi": "/public/v1/openapi.json",
             "events": [
                 {
-                    "event": "platform.commerce.order",
-                    "filter": "eq(status,Processing)",
+                    "event": "platform.commerce.order.created",
+                    "condition": f"and(eq(status,Processing),eq(product.id,{settings.product_id}))",
                     "path": "/public/v1/orders",
                     "task": True,
-                }
+                },
+                {
+                    "event": "platform.commerce.order.status_changed",
+                    "condition": f"and(eq(status,Processing),eq(product.id,{settings.product_id}))",
+                    "path": "/public/v1/orders",
+                    "task": True,
+                },
             ],
-
         },
     }
+
     for evtinfo in data["meta"]["events"]:
         msg = (
             f"Register event subscription to {evtinfo['event']} "
-            f"(task={evtinfo['task']}, filter={evtinfo.get("filter", "-")}) "
-            f"-> {evtinfo["path"]}"
+            f"(task={evtinfo['task']}, filter={evtinfo.get('filter', '-')}) "
+            f"-> {evtinfo['path']}"
         )
         logger.info(msg)
 
@@ -76,7 +80,7 @@ def bootstrap():
             data["channel"] = {}
 
     req = request.Request(
-        f"{settings.base_url}/extensibility/extensions/{settings.extension_id}/instances",
+        f"{settings.base_url}/integration/extensions/{settings.extension_id}/instances",
         method="POST",
         headers=headers,
         data=json.dumps(data).encode("utf-8"),
@@ -91,7 +95,7 @@ def bootstrap():
                 json.dump(identity, writer)
         logger.info(
             f"Instance bootstrap for extension {settings.extension_id} completed: "
-            f"{response_data["id"]}")
+            f"{response_data['id']}")
 
 
     ziticorn.run("mextmock.app:app", str(IDENTITY_FILE), workers=4)

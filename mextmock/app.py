@@ -2,11 +2,13 @@ import logging
 from pathlib import Path
 
 from devtools import pformat
-from fastapi import APIRouter, FastAPI
+from fastapi import APIRouter, Depends, FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from mextmock.logging import setup_logging
+from mextmock.logging_config import setup_logging
+from mextmock.scenarios.processor import BaseScenarioProcessor, get_scenario_process
 from mextmock.schemas import Event
+from mextmock.utils import AuthContext, get_auth_context
 
 logger = logging.getLogger("mextmock")
 setup_logging()
@@ -42,15 +44,20 @@ api = APIRouter(prefix="/public/v1")
     "/orders",
     tags=["Event handlers"],
 )
-async def process_orders(event: Event):
+async def process_orders(event: Event,
+                         auth_context: AuthContext | None = Depends(get_auth_context),
+                         order_processor: BaseScenarioProcessor = Depends(get_scenario_process),
+
+                         ):
     """
     Subscribe to **Orders** events (*platform.commerce.order*).
     Accept only **Orders** which status is `Processing`.
     """
+    logger.info(f"auth context: {auth_context}")
     logger.info(
         f"New event received: {pformat(event)}"
     )
-    return {"response": "OK"}
 
+    return await order_processor.process_order(event,auth_context)
 
 app.include_router(api)
