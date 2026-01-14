@@ -73,7 +73,7 @@ class MPTAsyncClient(BaseAsyncAPIClient):
         response.raise_for_status()
         return response.json()
 
-    async def change_task_status_to_execute(
+    async def change_task_status_to_processing(
             self,
             task_id: str,
     ):
@@ -81,6 +81,32 @@ class MPTAsyncClient(BaseAsyncAPIClient):
         response.raise_for_status()
         return response.json()
 
+    async def reschedule_task(
+            self,
+            task_id: str,
+    ):
+        response = await self.httpx_client.post(f"/system/tasks/{task_id}/reschedule")
+        response.raise_for_status()
+        return response.json()
+
+    async def update_task_progress(self,task_id:str,
+                                   progress: float,
+                                   installation_id:str,
+                                   extension_id:str,
+                                   account_id: str):
+        response = await self.httpx_client.put(
+            f"/system/tasks/{task_id}",
+            json={
+                "progress": progress,
+                "parameters": {
+                    "installationId": installation_id,
+                    "extensionId": extension_id,
+                    "accountId": account_id,
+                }
+            }
+        )
+        response.raise_for_status()
+        return response.json()
     async def change_task_status_to_complete(
             self,
             task_id: str,
@@ -93,17 +119,57 @@ class MPTAsyncClient(BaseAsyncAPIClient):
             self,
             installation_id: str,
     ):
-        response = await self.httpx_client.post(f"/extensibility/installations/{installation_id}/token")
+        response = await self.httpx_client.post(
+            f"/extensibility/installations/{installation_id}/token")
         response.raise_for_status()
         token = response.json()["token"]
-        print("token", token)
         return token
+
+
+    async def get_subscriptions(
+            self,
+            order_id: str,
+    ):
+        response = await self.httpx_client.get(f"/commerce/orders/{order_id}/subscriptions"
+                                               f"?select=parameters,agreement,lines,audit")
+        response.raise_for_status()
+        return response.json()
+
+    async def create_subscription(
+            self,
+            name:str,
+            lines: list[dict[str, Any]],
+            vendor_id:str,
+            order_id: str,
+            parameters: dict[str, Any] | None = None,
+
+    ):
+        _lines = []
+        for line in lines:
+            _lines.append({"id":line["id"]})
+
+        response = await self.httpx_client.post(
+            f"/commerce/orders/{order_id}/subscriptions",
+            json={
+                "name": name,
+                "parameters": parameters or {},
+                "externalIds": {
+                    "vendor": vendor_id,
+                },
+                "lines": _lines,
+            }
+        )
+        response.raise_for_status()
+        return response.json()
+
+
+
 
 
 def get_service_api_client():
     return MPTAsyncClient(token=settings.api_key)
 
-async def get_vendor_api_client(auth_context: AuthContext = Depends(get_auth_context)):
+async def get_installation_api_client(auth_context: AuthContext = Depends(get_auth_context)):
     if auth_context is None:
         return None
     mpt_service_api_client = get_service_api_client()

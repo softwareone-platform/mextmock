@@ -1,16 +1,21 @@
+import functools
+import logging
 import subprocess
 import uuid
 from dataclasses import dataclass
-from typing import Annotated, Any
+from typing import Annotated
 
 import jwt
 from fastapi import Header
+
+logger = logging.getLogger(__name__)
 
 ACCOUNT_ID_KEY = "https://claims.softwareone.com/accountId"
 EXTENSION_ID_KEY = "https://claims.softwareone.com/extensionId"
 SERVICE_ID_KEY = "https://claims.softwareone.com/serviceId"
 INSTALLATION_ID_KEY = "https://claims.softwareone.com/installationId"
-
+PARAM_PHASE_ORDERING = "ordering"
+PARAM_PHASE_FULFILLMENT = "fulfillment"
 
 @dataclass
 class AuthContext:
@@ -20,12 +25,12 @@ class AuthContext:
     service_id :str
 
 
-def _validate_auth_context(auth_context: Annotated[str | None, Header(alias="Authorization")] = None):
+def _validate_auth_context(auth_context:Annotated[str | None,
+Header(alias="Authorization")] = None):
     if auth_context is None:
         return None
     try:
         scheme, token = auth_context.split()
-        print(scheme, token)
     except ValueError:
         return None
     if scheme != "Bearer" or token is None:
@@ -96,9 +101,30 @@ def get_instance_external_id():
     except (subprocess.CalledProcessError, ValueError):
         return f"{uuid.getnode():012x}"
 
-def process_order_parameters(
-        order_payload: dict[str, Any],
-):
-    ordering_external_id = order_payload["parameters"]["ordering"][0]["externalId"]
-    ordering_value = order_payload["parameters"]["ordering"][0]["value"]
-    return ordering_external_id, ordering_value
+
+def find_first(func, iterable, default=None):
+    return next(filter(func, iterable), default)
+
+def get_parameter(parameter_phase, source, param_external_id):
+    """
+    Returns a parameter of a given phase by its external identifier.
+    Returns an empty dictionary if the parameter is not found.
+    Args:
+        parameter_phase (str): The phase of the parameter (ordering, fulfillment).
+        source : The source business object from which the parameter
+        should be extracted.
+        param_external_id (str): The unique external identifier of the parameter.
+
+    Returns:
+        dict: The parameter object or an empty dictionary if not found.
+    """
+    logger.debug("Order Parameters %s %s",param_external_id,source['parameters'][parameter_phase])
+    return find_first(
+        lambda x: x.get("externalId") == param_external_id,
+        source["parameters"][parameter_phase],
+        default={},
+    )
+
+
+get_ordering_parameter = functools.partial(get_parameter, PARAM_PHASE_ORDERING)
+
