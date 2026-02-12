@@ -6,8 +6,8 @@
     "moduleResolution": "bundler",
     "declaration": true,
     "emitDeclarationOnly": false,
-    "declarationDir": "../static",
-    "outDir": "../static",
+    "declarationDir": "./static",
+    "outDir": "./static",
     "skipLibCheck": true
   }
 }

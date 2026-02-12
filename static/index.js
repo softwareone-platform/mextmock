@@ -12746,7 +12746,7 @@ var require_jsx_runtime = __commonJS({
   }
 });
 
-// index.tsx
+// mextmock-ui/index.tsx
 var import_client = __toESM(require_client(), 1);
 
 // node_modules/@mpt-extension/sdk/dist/index.js
@@ -12759,7 +12759,7 @@ function setup(initialize) {
 }
 var setup2 = setup;
 
-// src/App.tsx
+// mextmock-ui/App.tsx
 var import_react5 = __toESM(require_react(), 1);
 
 // node_modules/@mpt-extension/sdk-react/dist/index.js
@@ -12824,7 +12824,7 @@ var useMPTEmit2 = useMPTEmit;
 var useMPTListen2 = useMPTListen;
 var useMPTModal2 = useMPTModal;
 
-// src/styles.scss
+// mextmock-ui/styles.scss
 var css = `h1, h2, h3, h4, h5, h6 {
   font-weight: 300;
 }
@@ -12843,10 +12843,10 @@ var css = `h1, h2, h3, h4, h5, h6 {
   display: flex;
   justify-content: space-between;
 }
-/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiL1VzZXJzL2FudG9uaGluei93b3Jrc3BhY2UvbWV4dG1vY2svbWV4dG1vY2svc3JjL3NyYyIsInNvdXJjZXMiOlsic3R5bGVzLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRTs7O0FBR0Y7RUFDRTs7O0FBR0Y7RUFDRTtFQUNBO0VBQ0E7OztBQUdGO0VBQ0U7RUFDQSIsInNvdXJjZXNDb250ZW50IjpbImgxLCBoMiwgaDMsIGg0LCBoNSwgaDYge1xuICBmb250LXdlaWdodDogMzAwO1xufVxuXG4uY29udGFpbmVyIHtcbiAgcGFkZGluZzogMTVweDtcbn1cblxuLm1vbm8ge1xuICBwYWRkaW5nOiA3cHggMTVweDtcbiAgZm9udC1mYW1pbHk6IG1vbm9zcGFjZTtcbiAgYmFja2dyb3VuZDogI2U0ZTRlNDtcbn1cblxuLnJvdyB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2Vlbjtcbn0iXX0= */`;
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiL1VzZXJzL2FudG9uaGluei93b3Jrc3BhY2UvbWV4dG1vY2svbWV4dG1vY2stdWkiLCJzb3VyY2VzIjpbInN0eWxlcy5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0U7OztBQUdGO0VBQ0U7OztBQUdGO0VBQ0U7RUFDQTtFQUNBOzs7QUFHRjtFQUNFO0VBQ0EiLCJzb3VyY2VzQ29udGVudCI6WyJoMSwgaDIsIGgzLCBoNCwgaDUsIGg2IHtcbiAgZm9udC13ZWlnaHQ6IDMwMDtcbn1cblxuLmNvbnRhaW5lciB7XG4gIHBhZGRpbmc6IDE1cHg7XG59XG5cbi5tb25vIHtcbiAgcGFkZGluZzogN3B4IDE1cHg7XG4gIGZvbnQtZmFtaWx5OiBtb25vc3BhY2U7XG4gIGJhY2tncm91bmQ6ICNlNGU0ZTQ7XG59XG5cbi5yb3cge1xuICBkaXNwbGF5OiBmbGV4O1xuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG59Il19 */`;
 document.head.appendChild(document.createElement("style")).appendChild(document.createTextNode(css));
 
-// src/App.tsx
+// mextmock-ui/App.tsx
 var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
 var App_default = () => {
   const { auth, data } = useMPTContext2();
@@ -12893,7 +12893,7 @@ var App_default = () => {
   ] });
 };
 
-// index.tsx
+// mextmock-ui/index.tsx
 var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
 setup2((element) => {
   const root = (0, import_client.createRoot)(element);

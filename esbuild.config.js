@@ -5,8 +5,8 @@ const watch = process.argv.includes("--watch");
 const env = process?.env?.NODE_ENV ?? JSON.stringify("production");
 
 const ctx = await context({
-  entryPoints: ['./index.tsx'],
-  outdir: '../static',
+  entryPoints: ['./mextmock-ui/index.tsx'],
+  outdir: './static',
   bundle: true,
   platform: 'browser',
   mainFields: ["browser", "module", "main"],

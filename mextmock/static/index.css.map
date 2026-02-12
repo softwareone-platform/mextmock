@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../src/styles.scss"],
-  "sourcesContent": ["* {\n  color: red;\n}"],
-  "mappings": ";AAAA;AACE,SAAA;;",
-  "names": []
-}

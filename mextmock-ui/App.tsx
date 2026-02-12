@@ -1,4 +1,4 @@
-import {useMemo, useCallback, useState} from 'react';
+import { useMemo, useCallback } from 'react';
 import { useMPTContext, useMPTModal } from '@mpt-extension/sdk-react';
 
 import './styles.scss';

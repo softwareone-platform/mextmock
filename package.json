@@ -1,10 +1,10 @@
 {
-  "name": "demo-extension-ui",
+  "name": "mextmock-ui",
   "private": true,
   "type": "module",
   "license": "Apache-2.0",
-  "main": "../static/index.js",
-  "types": "../static/index.d.ts",
+  "main": "./static/index.js",
+  "types": "./static/index.d.ts",
   "scripts": {
     "build:types": "tsc -p tsconfig.json",
     "build:code": "node esbuild.config.js",
@@ -14,7 +14,7 @@
     "start": "npm-run-all --parallel watch:types watch:code"
   },
   "files": [
-    "../static"
+    "./static"
   ],
   "dependencies": {
     "@mpt-extension/sdk": "^0.0.1",
