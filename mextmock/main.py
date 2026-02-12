@@ -49,7 +49,146 @@ def bootstrap():
                     "task": True,
                 }
             ],
+            "plugs": [
+                {
+                    "id": "subs-actions",
+                    "name": "Subscriptions Actions Demo",
+                    "description": "Check sockets",
+                    "icon": "adobe.png",
+                    "socket": "portal.commerce.subscriptions.actions",
+                    "href": "/static/index.js"
+                },
+                {
+                   "id": "subs-lines-actions",
+                   "name": "Subscriptions Lines Actions Demo",
+                   "description": "Check sockets",
+                   "icon": "adobe.png",
+                   "socket": "portal.commerce.subscriptions.line.actions",
+                   "href": "/static/index.js"
+                },
+                {
+                    "id": "sub-tabs",
+                    "name": "Subscription Tab Demo",
+                    "description": "Check sockets",
+                    "icon": "adobe.png",
+                    "socket": "portal.commerce.subscriptions.subscription",
+                    "href": "/static/index.js"
+                },
+                {
+                    "id": "sub-actions",
+                    "name": "Subscription Actions Demo",
+                    "description": "Check sockets",
+                    "icon": "adobe.png",
+                    "socket": "portal.commerce.subscriptions.subscription.actions",
+                    "href": "/static/index.js"
+                },
 
+                {
+                    "id": "agrs-actions",
+                    "name": "Agreements Actions Demo",
+                    "description": "Check sockets",
+                    "icon": "adobe.png",
+                    "socket": "portal.commerce.agreements.actions",
+                    "href": "/static/index.js"
+                },
+                {
+                   "id": "agrs-lines-actions",
+                   "name": "Agreements Lines Actions Demo",
+                   "description": "Check sockets",
+                   "icon": "adobe.png",
+                   "socket": "portal.commerce.agreements.line.actions",
+                   "href": "/static/index.js"
+                },
+                {
+                    "id": "agr-tabs",
+                    "name": "Agreement Tab Demo",
+                    "description": "Check sockets",
+                    "icon": "adobe.png",
+                    "socket": "portal.commerce.agreements.agreement",
+                    "href": "/static/index.js"
+                },
+                {
+                    "id": "agr-actions",
+                    "name": "Agreement Actions Demo",
+                    "description": "Check sockets",
+                    "icon": "adobe.png",
+                    "socket": "portal.commerce.agreements.agreement.actions",
+                    "href": "/static/index.js"
+                },
+
+                {
+                     "id": "ords-actions",
+                     "name": "Orders Actions Demo",
+                     "description": "Check sockets",
+                     "icon": "adobe.png",
+                     "socket": "portal.commerce.orders.actions",
+                     "href": "/static/index.js"
+                },
+                {
+                    "id": "ords-lines-actions",
+                    "name": "Orders Lines Actions Demo",
+                    "description": "Check sockets",
+                    "icon": "adobe.png",
+                    "socket": "portal.commerce.orders.line.actions",
+                    "href": "/static/index.js"
+                },
+                {
+                     "id": "ord-tabs",
+                     "name": "Order Tab Demo",
+                     "description": "Check sockets",
+                     "icon": "adobe.png",
+                     "socket": "portal.commerce.orders.order",
+                     "href": "/static/index.js"
+                },
+                {
+                     "id": "ord-actions",
+                     "name": "Order Actions Demo",
+                     "description": "Check sockets",
+                     "icon": "adobe.png",
+                     "socket": "portal.commerce.orders.order.actions",
+                     "href": "/static/index.js"
+                },
+
+                {
+                  "id": "asts-actions",
+                  "name": "Assets Actions Demo",
+                  "description": "Check sockets",
+                  "icon": "adobe.png",
+                  "socket": "portal.commerce.assets.actions",
+                  "href": "/static/index.js"
+                },
+                {
+                 "id": "asts-lines-actions",
+                 "name": "Assets Lines Actions Demo",
+                 "description": "Check sockets",
+                 "icon": "adobe.png",
+                 "socket": "portal.commerce.assets.line.actions",
+                 "href": "/static/index.js"
+                },
+                {
+                  "id": "ast-tabs",
+                  "name": "Asset Tab Demo",
+                  "description": "Check sockets",
+                  "icon": "adobe.png",
+                  "socket": "portal.commerce.assets.asset",
+                  "href": "/static/index.js"
+                },
+                {
+                  "id": "ast-actions",
+                  "name": "Asset Actions Demo",
+                  "description": "Check sockets",
+                  "icon": "adobe.png",
+                  "socket": "portal.commerce.assets.asset.actions",
+                  "href": "/static/index.js"
+                },
+                {
+                    "id": "modal",
+                    "name": "Just a modal",
+                    "description": "Check sockets",
+                    "icon": "adobe.png",
+                    "href": "/static/index.js"
+                }
+            ]
         },
     }
     for evtinfo in data["meta"]["events"]:

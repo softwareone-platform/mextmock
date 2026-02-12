@@ -30,7 +30,7 @@ app = FastAPI(
 app.mount(
     "/static",
     StaticFiles(
-        directory=Path(__file__).parent.resolve() / "static",
+        directory=Path(__file__).parent.parent.resolve() / "static",
         html=True,
     ),
     name="static",
