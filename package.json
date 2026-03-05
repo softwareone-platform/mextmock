@@ -19,6 +19,8 @@
   "dependencies": {
     "@mpt-extension/sdk": "^0.0.1",
     "@mpt-extension/sdk-react": "^0.0.1",
+    "@swo/design-system": "^5.0.133",
+    "@swo/design-tokens": "5.0.133",
     "axios": "^1.10.0",
     "esbuild-sass-plugin": "^3.6.0",
     "react": "^19.2.0",

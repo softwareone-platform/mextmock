@@ -19,6 +19,7 @@ const ctx = await context({
   plugins: [sassPlugin({
     filter: /\.scss$/,
     type: 'style',
+    loadPaths: ['./node_modules'],
   })],
 });
 

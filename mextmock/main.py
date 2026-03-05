@@ -137,7 +137,7 @@ def bootstrap():
                      "name": "Order Tab Demo",
                      "description": "Check sockets",
                      "icon": "adobe.png",
-                     "socket": "portal.commerce.orders.order",
+                     "socket": "portal.standalone.ffc.admin",
                      "href": "/static/index.js"
                 },
                 {
@@ -233,7 +233,7 @@ def bootstrap():
             f"{response_data["id"]}")
 
 
-    ziticorn.run("mextmock.app:app", str(IDENTITY_FILE), workers=4)
+    ziticorn.run("mextmock.app:app", str(IDENTITY_FILE), server_workers=4)
 
 
 if __name__ == "__main__":

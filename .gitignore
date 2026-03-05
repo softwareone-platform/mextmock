@@ -194,3 +194,5 @@ taplo.toml
 # Ignore identity
 
 identity.json
+
+static/
