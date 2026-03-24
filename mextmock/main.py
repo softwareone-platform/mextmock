@@ -51,143 +51,64 @@ def bootstrap():
             ],
             "plugs": [
                 {
-                    "id": "subs-actions",
-                    "name": "Subscriptions Actions Demo",
-                    "description": "Check sockets",
-                    "icon": "adobe.png",
-                    "socket": "portal.commerce.subscriptions.actions",
-                    "href": "/static/index.js"
+                  "socket": "portal",
+                  "id": "donate",
+
+                  "name": "Donate for a cat",
+                  "icon": "/static/kitty.png",
                 },
+                    {
+                        "socket": "portal.donate",
+                        "id": "configure",
+
+                        "name": "Schedule a regular donation",
+                        "description": "Configure a monthly donation for a cute cat",
+                        "icon": "/static/kitty.png",
+                        "href": "/static/configure.js"
+                    },
+                        {
+                            "socket": "portal.donate.configure.actions",
+                            "id": "configure-modal",
+
+                            "name": "One-time donation",
+                            "description": "Make a generous donation for a cute cat",
+                            "icon": "/static/kitty.png",
+                            "href": "/static/modal.js"
+                        },
+                    {
+                        "socket": "portal.donate",
+                        "id": "history",
+
+                        "name": "Donations history",
+                        "description": "Check out previous donations before making more generous one",
+                        "icon": "/static/kitty.png",
+                        "href": "/static/history.js"
+                    },
                 {
-                   "id": "subs-lines-actions",
-                   "name": "Subscriptions Lines Actions Demo",
-                   "description": "Check sockets",
-                   "icon": "adobe.png",
-                   "socket": "portal.commerce.subscriptions.line.actions",
-                   "href": "/static/index.js"
+                    "socket": "portal",
+                    "id": "get-one",
+                    "name": "Get a cat",
+                    "description": "Please consider becoming a cat servant",
+                    "icon": "/static/kitty.png",
+                    "href": "/static/get-one.js"
                 },
-                {
-                    "id": "sub-tabs",
-                    "name": "Subscription Tab Demo",
-                    "description": "Check sockets",
-                    "icon": "adobe.png",
-                    "socket": "portal.commerce.subscriptions.subscription",
-                    "href": "/static/index.js"
-                },
-                {
-                    "id": "sub-actions",
-                    "name": "Subscription Actions Demo",
-                    "description": "Check sockets",
-                    "icon": "adobe.png",
-                    "socket": "portal.commerce.subscriptions.subscription.actions",
-                    "href": "/static/index.js"
-                },
+                    {
+                        "socket": "portal.get-one.actions",
+                        "id": "get-one-modal",
+                        "name": "Donate",
+                        "description": "Make a generous donation for a cute cat",
+                        "icon": "/static/kitty.png",
+                        "href": "/static/modal.js"
+                    },
 
                 {
-                    "id": "agrs-actions",
-                    "name": "Agreements Actions Demo",
-                    "description": "Check sockets",
-                    "icon": "adobe.png",
-                    "socket": "portal.commerce.agreements.actions",
-                    "href": "/static/index.js"
+                    "socket": "portal.commerce.orders.order",
+                    "id": "order-get-one",
+                    "name": "Get a cat",
+                    "description": "Please consider becoming a cat servant",
+                    "condition": "eq(order.product.id, PRD-6551-5049)",
+                    "href": "/static/get-one.js"
                 },
-                {
-                   "id": "agrs-lines-actions",
-                   "name": "Agreements Lines Actions Demo",
-                   "description": "Check sockets",
-                   "icon": "adobe.png",
-                   "socket": "portal.commerce.agreements.line.actions",
-                   "href": "/static/index.js"
-                },
-                {
-                    "id": "agr-tabs",
-                    "name": "Agreement Tab Demo",
-                    "description": "Check sockets",
-                    "icon": "adobe.png",
-                    "socket": "portal.commerce.agreements.agreement",
-                    "href": "/static/index.js"
-                },
-                {
-                    "id": "agr-actions",
-                    "name": "Agreement Actions Demo",
-                    "description": "Check sockets",
-                    "icon": "adobe.png",
-                    "socket": "portal.commerce.agreements.agreement.actions",
-                    "href": "/static/index.js"
-                },
-
-                {
-                     "id": "ords-actions",
-                     "name": "Orders Actions Demo",
-                     "description": "Check sockets",
-                     "icon": "adobe.png",
-                     "socket": "portal.commerce.orders.actions",
-                     "href": "/static/index.js"
-                },
-                {
-                    "id": "ords-lines-actions",
-                    "name": "Orders Lines Actions Demo",
-                    "description": "Check sockets",
-                    "icon": "adobe.png",
-                    "socket": "portal.commerce.orders.line.actions",
-                    "href": "/static/index.js"
-                },
-                {
-                     "id": "ord-tabs",
-                     "name": "Order Tab Demo",
-                     "description": "Check sockets",
-                     "icon": "adobe.png",
-                     "socket": "portal.commerce.orders.order",
-                     "href": "/static/index.js"
-                },
-                {
-                     "id": "ord-actions",
-                     "name": "Order Actions Demo",
-                     "description": "Check sockets",
-                     "icon": "adobe.png",
-                     "socket": "portal.commerce.orders.order.actions",
-                     "href": "/static/index.js"
-                },
-
-                {
-                  "id": "asts-actions",
-                  "name": "Assets Actions Demo",
-                  "description": "Check sockets",
-                  "icon": "adobe.png",
-                  "socket": "portal.commerce.assets.actions",
-                  "href": "/static/index.js"
-                },
-                {
-                 "id": "asts-lines-actions",
-                 "name": "Assets Lines Actions Demo",
-                 "description": "Check sockets",
-                 "icon": "adobe.png",
-                 "socket": "portal.commerce.assets.line.actions",
-                 "href": "/static/index.js"
-                },
-                {
-                  "id": "ast-tabs",
-                  "name": "Asset Tab Demo",
-                  "description": "Check sockets",
-                  "icon": "adobe.png",
-                  "socket": "portal.commerce.assets.asset",
-                  "href": "/static/index.js"
-                },
-                {
-                  "id": "ast-actions",
-                  "name": "Asset Actions Demo",
-                  "description": "Check sockets",
-                  "icon": "adobe.png",
-                  "socket": "portal.commerce.assets.asset.actions",
-                  "href": "/static/index.js"
-                },
-                {
-                    "id": "modal",
-                    "name": "Just a modal",
-                    "description": "Check sockets",
-                    "icon": "adobe.png",
-                    "href": "/static/index.js"
-                }
             ]
         },
     }
@@ -215,7 +136,7 @@ def bootstrap():
             data["channel"] = {}
 
     req = request.Request(
-        f"{settings.base_url}/extensibility/extensions/{settings.extension_id}/instances",
+        f"{settings.base_url}/integration/extensions/{settings.extension_id}/instances",
         method="POST",
         headers=headers,
         data=json.dumps(data).encode("utf-8"),
@@ -233,7 +154,7 @@ def bootstrap():
             f"{response_data["id"]}")
 
 
-    ziticorn.run("mextmock.app:app", str(IDENTITY_FILE), workers=4)
+    ziticorn.run("mextmock.app:app", str(IDENTITY_FILE), server_workers=4)
 
 
 if __name__ == "__main__":

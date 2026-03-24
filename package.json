@@ -17,12 +17,16 @@
     "./static"
   ],
   "dependencies": {
-    "@mpt-extension/sdk": "^0.0.1",
-    "@mpt-extension/sdk-react": "^0.0.1",
+    "@mpt-extension/sdk": "^0.0.4",
+    "@mpt-extension/sdk-react": "^0.0.4",
+    "@swo/design-system": "^5.0.150",
+    "@swo/design-tokens": "^5.0.144",
+    "@swo/user-react": "^5.0.0",
     "axios": "^1.10.0",
     "esbuild-sass-plugin": "^3.6.0",
     "react": "^19.2.0",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-router": "^7.13.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.7",

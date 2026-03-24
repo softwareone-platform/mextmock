@@ -1,25 +1,36 @@
+import { rmSync } from 'node:fs';
+import path from 'node:path';
 import { context } from 'esbuild';
 import { sassPlugin } from 'esbuild-sass-plugin';
 
 const watch = process.argv.includes("--watch");
-const env = process?.env?.NODE_ENV ?? JSON.stringify("production");
+const env = JSON.stringify(process.env.NODE_ENV ?? 'production');
+const outdir = path.resolve('./static');
+
+rmSync(outdir, { recursive: true, force: true });
 
 const ctx = await context({
-  entryPoints: ['./mextmock-ui/index.tsx'],
-  outdir: './static',
+  entryPoints: [
+    './mextmock-ui/configure.tsx',
+    './mextmock-ui/get-one.tsx',
+    './mextmock-ui/history.tsx',
+    './mextmock-ui/modal.tsx',
+  ],
+  outdir,
   bundle: true,
   platform: 'browser',
   mainFields: ["browser", "module", "main"],
-  format: 'esm',
+  format: 'iife',
   sourcemap: true,
   allowOverwrite: true,
   define: {
     "process.env.NODE_ENV": env,
   },
-  plugins: [sassPlugin({
-    filter: /\.scss$/,
-    type: 'style',
-  })],
+plugins: [sassPlugin({
+  filter: /\.scss$/,
+  type: 'style',
+  loadPaths: ['node_modules'],
+})],
 });
 
 if (watch) {
